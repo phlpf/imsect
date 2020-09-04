@@ -1,8 +1,10 @@
 import dotenv as de
 import os
+
 from slack import WebClient
 import slackeventsapi as seapi
-import time, re
+
+import block_creator as bc
 de.load_dotenv()
 
 signing_secret = os.getenv("SIGNING_SECRET")
@@ -19,20 +21,7 @@ def handle_message(event_data):
     if message.get("subtype") is None and "hello" in message.get('text'):
         channel = message["channel"]
         print(channel, type(channel))
-        send_message = {
-                "channel": channel,
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": (
-                                "Hello\n\n"
-                            ),
-                        },
-                    }
-                ]
-            }
+        send_message = bc.create_normal_message("hello", channel)
         slack_client.chat_postMessage(**send_message)
 
 
