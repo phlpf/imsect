@@ -1,9 +1,14 @@
 # remove all to start
 *
 
-# unremove main file and other modules
+# add main file and other modules
 !bot.py
 !block_creator.py
+!backend_manager.py
+!csv_formatter.py
 
-# unremove this file
+# add this file
 !.gitignore
+
+# add TODO
+!TODO.md

@@ -23,18 +23,24 @@ def on_message(event_data):
         text = message.get('text')
         splitup = text.split(' ')
         if len(splitup) <= 1:
+            print(len(splitup), splitup)
             send_message = bc.create_normal_message("hello! mention me with `help` for commands.", channel)
             slack_client.chat_postMessage(**send_message)
             return
-        handle_command(splitup[1], splitup[1:], channel)    
+        handle_command(splitup[1:], channel)    
 
-def handle_command(command, args, channel): 
+def handle_command(args, channel): 
+    command = args[0]
     print("command: ", command, "\narguements: ", args)
     if command == 'help' or 'help' in args:
         send_message = bc.create_normal_message("IMSect. Inventory Management System.\n\
 *Command Format: *`@imsect <command> <parameters>`", channel)
         slack_client.chat_postMessage(**send_message)
-
+        return
+    if command == 'test':
+        send_message = bc.create_normal_message("this is a test command for WIP features", channel)
+        slack_client.chat_postMessage(**send_message)
+        return
 @slack_events_adapter.on("error")
 def error_handler(err):
     print("ERROR: " + str(err))
