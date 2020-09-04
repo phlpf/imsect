@@ -26,10 +26,14 @@ def on_message(event_data):
             send_message = bc.create_normal_message("hello! mention me with `help` for commands.", channel)
             slack_client.chat_postMessage(**send_message)
             return
-        handle_command(splitup[1], splitup[1:])    
+        handle_command(splitup[1], splitup[1:], channel)    
 
-def handle_command(command, args): 
-    pass
+def handle_command(command, args, channel): 
+    print("command: ", command, "\narguements: ", args)
+    if command == 'help' or 'help' in args:
+        send_message = bc.create_normal_message("IMSect. Inventory Management System.\n\
+*Command Format: *`@imsect <command> <parameters>`", channel)
+        slack_client.chat_postMessage(**send_message)
 
 @slack_events_adapter.on("error")
 def error_handler(err):
