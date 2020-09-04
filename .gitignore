@@ -1,0 +1,9 @@
+# remove all to start
+*
+
+# unremove main file and other modules
+!bot.py
+!block_creator.py
+
+# unremove this file
+!.gitignore
