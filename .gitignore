@@ -5,7 +5,6 @@
 !bot.py
 !block_creator.py
 !backend_manager.py
-!csv_formatter.py
 
 # add this file
 !.gitignore

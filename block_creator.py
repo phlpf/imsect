@@ -23,7 +23,9 @@ def create_code_message(message, channel):
                     "text": {
                         "type": "mrkdwn",
                         "text": (
-                            message + '\n\n'
+                            '```\n' +
+                            message + '\n'
+                            + '```\n\n'
                         ),
                     },
                 }

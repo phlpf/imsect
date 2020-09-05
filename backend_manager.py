@@ -1,5 +1,5 @@
 import csv
-import csv_formatter
+#import csv_formatter as csvf
 
 class csv_file:
     def __init__(self, filename, deliminator=','):
@@ -21,7 +21,9 @@ class csv_file:
                 return row
     def add_item(self, row):
         self.contents.append(row)
-    def close(self):
+    #def format_items(self):
+    #    return csvf.format_csv_list(self.contents)
+    def save(self):
         with open(self.filename, 'w') as csvfile:
             for row in self.contents:
                 for i in range(len(row)):
@@ -32,4 +34,4 @@ if __name__ == '__main__':
     test = csv_file('test.csv')
     print(test.get_item('x'))
     print(test.get_item('row 2'))
-    test.close()
+    test.save()

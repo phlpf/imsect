@@ -17,6 +17,7 @@ slack_events_adapter = seapi.SlackEventAdapter(signing_secret, "/slack/events")
 slack_client = WebClient(bot_token)
 
 database = bm.csv_file("database.csv")
+print(database.format_items())
 
 @slack_events_adapter.on("app_mention")
 def on_message(event_data):
@@ -45,6 +46,13 @@ def handle_command(args, channel):
         return
     if command == 'test':
         send_message = bc.create_normal_message("this is a test command for WIP features", channel)
+        slack_client.chat_postMessage(**send_message)
+        return
+    if command == 'get_all':
+        raw_message = ""
+        for row in database.contents:
+            raw_message += ' *|* '.join(row)
+        send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
         return
 @slack_events_adapter.on("error")
