@@ -5,11 +5,16 @@ class csv_file:
     def __init__(self, filename, deliminator=','):
         self.filename = filename
         self.deliminator = deliminator
-        with open(filename, newline='') as csvfile:
-            contents = csv.reader(csvfile, quotechar='"')
+        try:
+            with open(filename, newline='') as csvfile:
+                contents = csv.reader(csvfile, quotechar='"')
+                self.contents = []
+                for row in contents:
+                    self.contents.append(row)
+        except FileNotFoundError:
+            print("File Not Found. Will be created on exit")
             self.contents = []
-            for row in contents:
-                self.contents.append(row)
+            
     def get_item(self, item):
         for row in self.contents:
             if row[0] == item:
