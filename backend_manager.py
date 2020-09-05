@@ -1,4 +1,5 @@
 import csv
+import json
 #import csv_formatter as csvf
 
 class csv_file:
@@ -11,6 +12,11 @@ class csv_file:
                 self.contents = []
                 for row in contents:
                     self.contents.append(row)
+            with open(filename+'.old', 'w') as backup:
+                for row in self.contents:
+                    for i in range(len(row)):
+                        backup.write((self.deliminator if not i == 0 else '') + str(row[i]))
+                    backup.write('\n')
         except FileNotFoundError:
             print("File Not Found. Will be created on exit")
             self.contents = []
