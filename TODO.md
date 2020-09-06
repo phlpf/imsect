@@ -29,7 +29,7 @@
 - [x] have command to add items  
     - [x] what do we do if someone adds a duplicate item?
     - [x] automatic time added (possibly through the JSON file)
-    - [ ] add optional values
+    - [x] add optional values
 - [ ] have command to remove items  
     - [ ] command to remove only some of high quantity items (e.g. screws)  
 - [ ] have command to 'checkout' items  

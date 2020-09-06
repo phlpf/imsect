@@ -106,15 +106,20 @@ _Commands:_\n\
         if not "\n" in data_str and not ',' in data_str:
             # Format data, add it to the database, and save the database
             data = data_str.split('|')
-            database.add_item(data)
+            saved_item = database.add_item(data)
             database.save()
             
-            # Respond with what we added
-            raw_message = ' *|* '.join(data) + '\n\n'
-            raw_message = "Added: \n" + raw_message
-            send_message = bc.create_normal_message(raw_message, channel)
-            
-            slack_client.chat_postMessage(**send_message)
+            if saved_item != None:
+                # Respond with what we added
+                raw_message = ' *|* '.join(saved_item) + '\n\n'
+                raw_message = "Added: \n" + raw_message
+                send_message = bc.create_normal_message(raw_message, channel)
+                
+                slack_client.chat_postMessage(**send_message)
+            else :
+                send_message = bc.create_normal_message("Not enough items!", channel)
+                
+                slack_client.chat_postMessage(**send_message)
         else:
             # Tell them they can't do that
             raw_message = "Invalid Characters in item. Please do not include commas or new lines in your message"
