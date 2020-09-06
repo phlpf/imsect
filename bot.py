@@ -17,14 +17,11 @@ slack_events_adapter = seapi.SlackEventAdapter(signing_secret, "/slack/events")
 slack_client = WebClient(bot_token)
 
 database = bm.csv_file("database.csv")
-print(database.format_items())
 
 @slack_events_adapter.on("app_mention")
 def on_message(event_data):
     message = event_data["event"]
     user_mention = "<@%s>"%message["user"]
-    print(event_data)
-    print("message recieved: " + message.get("text"))
     if message.get("subtype") is None:
         channel = message["channel"]
         text = message.get('text')
@@ -36,6 +33,16 @@ def on_message(event_data):
             return
         handle_command(splitup[1:], channel)    
 
+@slack_events_adapter.on("message")
+def on_message(event_data):
+    message = event_data["event"]
+    user_mention = "<@%s>"%message["user"]
+    if message.get("subtype") is None:
+        channel = message["channel"]
+        text = message.get('text')
+        splitup = text.split(' ')
+        handle_command(splitup, channel)   
+
 def handle_command(args, channel): 
     command = args[0]
     print("command: ", command, "\narguements: ", args)
@@ -43,18 +50,28 @@ def handle_command(args, channel):
         send_message = bc.create_normal_message("IMSect. Inventory Management System.\n\
 *Command Format: *`@imsect <command> <parameters>`", channel)
         slack_client.chat_postMessage(**send_message)
-        return
-    if command == 'test':
+    elif command == 'test':
         send_message = bc.create_normal_message("this is a test command for WIP features", channel)
         slack_client.chat_postMessage(**send_message)
-        return
-    if command == 'get_all':
+    elif command == 'get_all':
         raw_message = ""
         for row in database.contents:
-            raw_message += ' *|* '.join(row)
+            raw_message += ' *|* '.join(row) + '\n\n'
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
-        return
+    elif command == 'add':
+        # add a new item. for now, assume it's the correct format
+        # all datapoints are separated by |
+        data_str = ' '.join(args[1:])
+        data = data_str.split('|')
+        database.add_item(data)
+        database.save()
+        raw_message = ' *|* '.join(data) + '\n\n'
+        raw_message = "Added: \n" + raw_message
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+        
+
 @slack_events_adapter.on("error")
 def error_handler(err):
     print("ERROR: " + str(err))

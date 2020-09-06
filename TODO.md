@@ -14,6 +14,7 @@
     - what should be the identifier? name or serial number?
         - serial number is more exact, but name is easier
     - `values` (so far):
+        - database number (given by database for management)
         - name (important)
         - in house part number (important)
         - name of person currently in possesion (important)
@@ -25,8 +26,9 @@
         - subteam (optional)
         - project (optional)
         - serial number (optional)
-    - Idea: use a JSON file to denote the format of the values, telling what values you have and what key should be used to call them
-- [ ] have command to easily add items  
+    - [ ] Idea: use a JSON file to denote the format of the values, telling what values you have and what key should be used to call them
+- [x] have command to add items  
+    - [ ] make it intuative
     - [ ] what do we do if someone adds a duplicate item?
 - [ ] have command to remove items  
     - [ ] command to remove only some of high quantity items (e.g. screws)  
@@ -36,7 +38,7 @@
         - quantity taken out after name?  
             - should even singular items have this?  
         - how about if multiple people take out high quantity items?  
-- [ ] command to look at all items
+- [x] command to look at all items
     - [ ] basic search (for `type of part`)
         - [ ] **\*FUTURE GOAL\*** other types of arguements:
             - all values (see `values`)
