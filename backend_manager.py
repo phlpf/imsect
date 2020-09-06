@@ -49,10 +49,19 @@ class csv_file:
     # Add a row to our list 
     def add_item(self, row):
         added_row = row[:]
+        
         if(self.date_key != -1):
             added_row.insert(self.date_key, str(get_current_date()))
-        self.contents.append([str(len(self.contents))] + added_row)
+        
+        if len(added_row) < self.format_data["optional_start"]:
+            print("Not enough keys. Skipping")
+            return False
 
+        if len(added_row) < self.format_data["amount_of_keys"] and len(added_row) >= self.format_data["optional_start"]:
+            for i in range(len(added_row), self.format_data["amount_of_keys"]):
+                added_row.append('N/A')
+        self.contents.append([str(len(self.contents))] + added_row)
+        return True
     # Save our file
     def save(self):
         with open(self.filename, 'w') as csvfile:
