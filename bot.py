@@ -92,8 +92,11 @@ _Commands:_\n\
     elif command == 'get_all':
         # Return a formatted version of the database
         raw_message = ""
-        for row in database.contents:
-            raw_message += ' *|* '.join(row) + '\n\n'
+        for i in range(len(database.contents)):
+            if i == 0 and database.has_explanation_row:
+                raw_message += '*' + (' | '.join(database.contents[i])) + '*'+'\n\n'
+            else:
+                raw_message += ' *|* '.join(database.contents[i]) + '\n\n'
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
 

@@ -1,9 +1,11 @@
 {
-    "amount_of_keys": 10,
+    "amount_of_keys": 9,
     "identifier_key_index": 0,
-    "automatic_date_key": 4,
+    "automatic_date_index": 5,
     "name_index": 1,
-    "optional_start": 8,
+    "optional_start": 7,
+    "holder_index": 6,
+    "has_explanation_row":true,
     "key_names": {
         "0":"part_num",
         "1":"name",
@@ -11,9 +13,8 @@
         "3":"in_house_num",
         "4":"supplier",
         "5":"date",
-        "6":"holder",
-        "7":"description",
-        "8":"project",
-        "9":"serial_num"
+        "6":"description",
+        "7":"project",
+        "8":"serial_num"
     }
 }

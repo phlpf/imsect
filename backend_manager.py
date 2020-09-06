@@ -38,8 +38,10 @@ class csv_file:
         except FileNotFoundError:
             print("The Format File (" + format_file + ") doesn't exist. Exiting")
             exit()
-        self.date_key = self.format_data["automatic_date_key"]
-
+        self.date_key = self.format_data["automatic_date_index"]
+        self.optional_start = self.format_data["optional_start"] - \
+            (1 if self.date_key<self.format_data["optional_start"] and self.date_key>=0 else 0)
+        self.has_explanation_row = self.format_data["has_explanation_row"]
     # get a specific item
     def get_item(self, item):
         for row in self.contents:
@@ -50,20 +52,21 @@ class csv_file:
     def add_item(self, row):
         added_row = row[:]
         
+        added_row = [str(len(self.contents))] + added_row
+        
         if(self.date_key != -1):
             added_row.insert(self.date_key, str(get_current_date()))
         
-        if len(added_row) < self.format_data["optional_start"]:
+        if len(added_row) < self.optional_start:
             print("Not enough keys. Skipping")
             return None
 
-        if len(added_row) < self.format_data["amount_of_keys"] and len(added_row) >= self.format_data["optional_start"]:
+        if len(added_row) < self.format_data["amount_of_keys"] and len(added_row) >= self.optional_start:
             for i in range(len(added_row), self.format_data["amount_of_keys"]):
                 added_row.append('N/A')
         
-        added_row = [str(len(self.contents))] + added_row
-        
         self.contents.append(added_row)
+        added_row.append('N/A')
         return added_row
     # Save our file
     def save(self):
