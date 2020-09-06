@@ -1,6 +1,10 @@
 import csv
 import json
+import datetime
 #import csv_formatter as csvf
+
+def get_current_date():
+    return datetime.date.today()
 
 class csv_file:
     def __init__(self, filename, deliminator=',', format_file="format.json"):
@@ -28,6 +32,13 @@ class csv_file:
             # Log that we don't have a file named that
             print("File Not Found. Will be created on exit")
             self.contents = []
+        try:
+            with open(format_file) as jsonfile:
+                self.format_data = json.loads(jsonfile.read())
+        except FileNotFoundError:
+            print("The Format File (" + format_file + ") doesn't exist. Exiting")
+            exit()
+        self.date_key = self.format_data["automatic_date_key"]
 
     # get a specific item
     def get_item(self, item):
@@ -37,7 +48,10 @@ class csv_file:
 
     # Add a row to our list 
     def add_item(self, row):
-        self.contents.append([str(len(self.contents))] + row)
+        added_row = row[:]
+        if(self.date_key != -1):
+            added_row.insert(self.date_key, str(get_current_date()))
+        self.contents.append([str(len(self.contents))] + added_row)
 
     # Save our file
     def save(self):
@@ -47,7 +61,7 @@ class csv_file:
                 # Save each datapoint individually
                 for i in range(len(row)):
                     csvfile.write((self.deliminator if not i == 0 else '') + str(row[i]))
-                
+
                 csvfile.write('\n')
 
 # Test our functions
@@ -56,3 +70,4 @@ if __name__ == '__main__':
     print(test.get_item('x'))
     print(test.get_item('row 2'))
     test.save()
+    print(str(get_current_date()), type(str(get_current_date())))

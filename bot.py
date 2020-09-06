@@ -34,6 +34,7 @@ def on_message(event_data):
     message = event_data["event"]
     # Make the user mention in case we need it
     user_mention = "<@%s>"%message["user"]
+
     if message.get("subtype") is None:
         # Get the channel the message was in
         channel = message["channel"]
@@ -42,11 +43,13 @@ def on_message(event_data):
         # Split the message into parts
         splitup = text.split(' ')
         # If we don't have any command, send a default message
+
         if len(splitup) <= 1:
             print(len(splitup), splitup)
             send_message = bc.create_normal_message("hello " + user_mention + "! mention me with `help` for commands.", channel)
             slack_client.chat_postMessage(**send_message)
             return
+
         handle_command(splitup[1:], channel)    
 
 # A message was recieved through a DM
@@ -54,10 +57,13 @@ def on_message(event_data):
 def on_message(event_data):
     message = event_data["event"]
     user_mention = "<@%s>"%message["user"]
+
     if message.get("subtype") is None:
         channel = message["channel"]
+
         text = message.get('text')
         splitup = text.split(' ')
+
         handle_command(splitup, channel)   
 
 # Main function
@@ -65,6 +71,7 @@ def handle_command(args, channel):
     # Get the command from the arguements
     command = args[0]
     print("command: ", command, "\narguements: ", args)
+
     if command == 'help' or 'help' in args:
         # Send a message showing how to use the bot
         send_message = bc.create_normal_message("IMSect. Inventory Management System.\n\
@@ -73,11 +80,15 @@ def handle_command(args, channel):
 _Commands:_\n\
 `help`: this function\n\
 `get_all`: list all items in database. it will be very large, so I recommend you do this in dms\n\
-`add`: add item. syntax for adding item: `add item name|location|inhouse number|...`", channel)
+`add`: add item. syntax for adding item: `add item name|location|in-house number|...`\n\
+    - Current valuse you need to supply: Name, Location, In-House Number, Supplier, Type, Project (Optional), Serial Number (Optional)", channel)
+
         slack_client.chat_postMessage(**send_message)
+
     elif command == 'test':
         send_message = bc.create_normal_message("this is a test command for WIP features", channel)
         slack_client.chat_postMessage(**send_message)
+
     elif command == 'get_all':
         # Return a formatted version of the database
         raw_message = ""
@@ -85,22 +96,30 @@ _Commands:_\n\
             raw_message += ' *|* '.join(row) + '\n\n'
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
+
     elif command == 'add':
         # add a new item. for now, assume it's the correct format
         # all datapoints are separated by |
         data_str = ' '.join(args[1:])
-        # newlines and commas are used in csv. we can't have them
+
+        # new lines and commas are used in csv. we can't have them
         if not "\n" in data_str and not ',' in data_str:
+            # Format data, add it to the database, and save the database
             data = data_str.split('|')
             database.add_item(data)
             database.save()
+            
+            # Respond with what we added
             raw_message = ' *|* '.join(data) + '\n\n'
             raw_message = "Added: \n" + raw_message
             send_message = bc.create_normal_message(raw_message, channel)
+            
             slack_client.chat_postMessage(**send_message)
         else:
-            raw_message = "Invalid Characters in item. Please do not include commas or newlines in your message"
+            # Tell them they can't do that
+            raw_message = "Invalid Characters in item. Please do not include commas or new lines in your message"
             send_message = bc.create_normal_message(raw_message, channel)
+            
             slack_client.chat_postMessage(**send_message)
 
 # Uh oh. An error occured. Log it, but don't stop 

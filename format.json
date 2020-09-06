@@ -1,0 +1,28 @@
+{
+    "amount_of_keys": 10,
+    "identifier_key_index": 0,
+    "automatic_date_key": 4,
+    "name_index": 1,
+    "key_names": {
+        "0":{"name":"part_num",
+             "optional":false},
+        "1":{"name":"name",
+             "optional":false},
+        "2":{"name":"location",
+             "optional":false},
+        "3":{"name":"in_house_num",
+             "optional":false},
+        "4":{"name":"supplier",
+             "optional":false},
+        "5":{"name":"date",
+             "optional":false},
+        "6":{"name":"holder",
+             "optional":false},
+        "7":{"name":"description",
+             "optional":false},
+        "8":{"name":"project",
+            "optional":true},
+        "9":{"name":"serial_num",
+            "optional":true}
+    }
+}

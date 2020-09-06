@@ -23,14 +23,12 @@
         - date added (automatic)
         - type of part (description)
         - quantity (optional, automatically 1)
-        - subteam (optional)
         - project (optional)
         - serial number (optional)
-    - [ ] Idea: use a JSON file to denote the format of the values, telling what values you have and what key should be used to call them
+    - [x] Idea: use a JSON file to denote the format of the values, telling what values you have and what key should be used to call them
 - [x] have command to add items  
-    - [ ] make it intuative
     - [x] what do we do if someone adds a duplicate item?
-    - [ ] automatic time added (possibly through the JSON file)
+    - [x] automatic time added (possibly through the JSON file)
 - [ ] have command to remove items  
     - [ ] command to remove only some of high quantity items (e.g. screws)  
 - [ ] have command to 'checkout' items  

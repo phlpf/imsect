@@ -9,5 +9,8 @@
 # add this file
 !.gitignore
 
+# format file
+!format.json
+
 # add TODO
 !TODO.md
