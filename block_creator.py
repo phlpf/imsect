@@ -1,4 +1,8 @@
+"""
+    A Module to help with using blocks
+"""
 
+# Create a normal message block
 def create_normal_message(message, channel):
     return {
             "channel": channel,
@@ -14,6 +18,7 @@ def create_normal_message(message, channel):
                 }
             ]
         }
+# UNUSED: Create a message in a code block
 def create_code_message(message, channel):
     return {
             "channel": channel,
