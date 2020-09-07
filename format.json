@@ -1,6 +1,6 @@
 {
     "amount_of_keys": 9,
-    "identifier_key_index": 0,
+    "identifier_index": 0,
     "automatic_date_index": 5,
     "name_index": 1,
     "optional_start": 7,

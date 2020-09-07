@@ -25,7 +25,7 @@ slack_events_adapter = seapi.SlackEventAdapter(signing_secret, "/slack/events")
 slack_client = WebClient(bot_token)
 
 # Database
-database = bm.csv_file("database.csv")
+database = bm.item_database("database.csv")
 
 # A message was recieved that mentioned us in a channel
 @slack_events_adapter.on("app_mention")
@@ -93,10 +93,13 @@ _Commands:_\n\
         # Return a formatted version of the database
         raw_message = ""
         for i in range(len(database.contents)):
+            # If we have one, add a row explaning what the data is
             if i == 0 and database.has_explanation_row:
                 raw_message += '*' + (' | '.join(database.contents[i])) + '*'+'\n\n'
             else:
                 raw_message += ' *|* '.join(database.contents[i]) + '\n\n'
+        
+        # Send a message containing all the data
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
 
@@ -128,6 +131,25 @@ _Commands:_\n\
             raw_message = "Invalid Characters in item. Please do not include commas or new lines in your message"
             send_message = bc.create_normal_message(raw_message, channel)
             
+            slack_client.chat_postMessage(**send_message)
+    elif command == 'remove':
+        # Get the index they want to get rid of
+        try:
+            index = int(args[1])
+        except ValueError:
+            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all")
+            slack_client.chat_postMessage(**send_message)
+
+        data = database.remove_item(index)
+        if data != None:
+            database.save()
+
+            raw_message = ' *|* '.join(data) + '\n\n'
+            raw_message = "Removed: \n" + raw_message
+            send_message = bc.create_normal_message(raw_message, channel)
+            slack_client.chat_postMessage(**send_message)
+        else:
+            send_message = bc.create_normal_message("Index to large!", channel)
             slack_client.chat_postMessage(**send_message)
 
 # Uh oh. An error occured. Log it, but don't stop 
