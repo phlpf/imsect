@@ -29,7 +29,7 @@ database = bm.item_database("database.csv")
 
 # A message was recieved that mentioned us in a channel
 @slack_events_adapter.on("app_mention")
-def on_message(event_data):
+def on_mention(event_data):
     # Get data about only the message
     message = event_data["event"]
     # Make the user mention in case we need it
@@ -56,7 +56,7 @@ def on_message(event_data):
 @slack_events_adapter.on("message")
 def on_message(event_data):
     message = event_data["event"]
-    user_mention = "<@%s>"%message["user"]
+    # user_mention = "<@%s>"%message["user"]
 
     if message.get("subtype") is None:
         channel = message["channel"]
@@ -137,7 +137,7 @@ _Commands:_\n\
         try:
             index = int(args[1])
         except ValueError:
-            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all")
+            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all", channel)
             slack_client.chat_postMessage(**send_message)
 
         data = database.remove_item(index)

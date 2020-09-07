@@ -30,8 +30,9 @@
     - [x] what do we do if someone adds a duplicate item?
     - [x] automatic time added (possibly through the JSON file)
     - [x] add optional values
-- [ ] have command to remove items  
+- [x] have command to remove items  
     - [ ] command to remove only some of high quantity items (e.g. screws)  
+    - [ ] **\*FUTURE GOAL\*** make sure only permitted individuals are removing items  
 - [ ] have command to 'checkout' items  
     - should you be able to 'checkout' multiple items at a time?  
     - how do we checkout high quantity items (e.g. screws)?  
