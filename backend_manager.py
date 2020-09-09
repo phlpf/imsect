@@ -68,7 +68,7 @@ class item_database:
 
         # Add optional data if it's not there
         if len(added_row) < self.format_data["amount_of_keys"] and len(added_row) >= self.optional_start:
-            for i in range(len(added_row), self.format_data["amount_of_keys"]):
+            for _ in range(len(added_row), self.format_data["amount_of_keys"]):
                 added_row.append('N/A')
         
         # Add the row
@@ -90,6 +90,21 @@ class item_database:
             new_contents[i][self.identifier_index] = str(int(new_contents[i][self.identifier_index])-1)
         self.contents = new_contents[:]
         return removed_row
+
+    def checkout_item(self, index, new_holder, needed_holder="N/A"):
+        size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        if index >= size_of_contents:
+            print("Someone checked out a bad index!")
+            return None
+        checkedout_row, absolute_index = self.get_item(str(index))
+
+        if checkedout_row[-1] == needed_holder:
+            self.contents[absolute_index][-1] = new_holder
+        else:
+            return None
+        
+        return checkedout_row
+
     # Save our file
     def save(self):
         with open(self.filename, 'w') as csvfile:

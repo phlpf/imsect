@@ -33,12 +33,16 @@
 - [x] have command to remove items  
     - [ ] command to remove only some of high quantity items (e.g. screws)  
     - [ ] **\*FUTURE GOAL\*** make sure only permitted individuals are removing items  
-- [ ] have command to 'checkout' items  
+- [x] have command to 'checkout' items  
+    - [ ] add 'uncheckout'
+        - what should the name be?
+            - uncheckout?
     - should you be able to 'checkout' multiple items at a time?  
     - how do we checkout high quantity items (e.g. screws)?  
         - quantity taken out after name?  
             - should even singular items have this?  
-        - how about if multiple people take out high quantity items?  
+        - how about if multiple people take out high quantity items?
+            - for now, assume they wont take out high quantity items, but just remove them  
 - [x] command to look at all items
     - [ ] basic search (for `type of part`)
         - [ ] **\*FUTURE GOAL\*** other types of arguements:

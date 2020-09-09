@@ -175,13 +175,35 @@ _Commands:_\n\
             send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all`", channel)
             slack_client.chat_postMessage(**send_message)
             return
+        data = database.checkout_item(index, user_to_checkout)
         # Holder is always last property
-        if database.contents[index][-1] == 'N/A':
-            database.contents[index][-1] = user_to_checkout
-        else:
-            send_message = bc.create_normal_message(database.contents[index][-1] + " already checked that out!", channel)
+        if data==None:
+            send_message = bc.create_normal_message("Someone else already checked that out (or it doesn't exist)!", channel)
             slack_client.chat_postMessage(**send_message)
+            return
+        database.save()
+    
+    elif command == "uncheckout":
+        if len(args) == 1:
+            send_message = bc.create_normal_message("No index provided!", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        user_to_uncheckout = mention
+        # Get the index
+        try:
+            index = int(args[1])
+        except ValueError:
+            # Make sure it's actually an index
+            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all`", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        data = database.checkout_item(index, 'N/A', needed_holder=user_to_uncheckout)
 
+        if data==None:
+            send_message = bc.create_normal_message("You don't have that!", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        database.save()
 # Uh oh. An error occured. Log it, but don't stop 
 @slack_events_adapter.on("error")
 def error_handler(err):
