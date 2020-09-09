@@ -50,13 +50,13 @@ def on_mention(event_data):
             slack_client.chat_postMessage(**send_message)
             return
 
-        handle_command(splitup[1:], channel)    
+        handle_command(splitup[1:], channel, user_mention)    
 
 # A message was recieved through a DM
 @slack_events_adapter.on("message")
 def on_message(event_data):
     message = event_data["event"]
-    # user_mention = "<@%s>"%message["user"]
+    user_mention = "<@%s>"%message["user"]
 
     if message.get("subtype") is None:
         channel = message["channel"]
@@ -64,10 +64,10 @@ def on_message(event_data):
         text = message.get('text')
         splitup = text.split(' ')
 
-        handle_command(splitup, channel)   
+        handle_command(splitup, channel, user_mention)   
 
 # Main function
-def handle_command(args, channel): 
+def handle_command(args, channel, mention): 
     # Get the command from the arguements
     command = args[0]
     print("command: ", command, "\narguements: ", args)
@@ -133,23 +133,53 @@ _Commands:_\n\
             
             slack_client.chat_postMessage(**send_message)
     elif command == 'remove':
+        if len(args) == 1:
+            send_message = bc.create_normal_message("No index provided!", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
         # Get the index they want to get rid of
         try:
             index = int(args[1])
         except ValueError:
-            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all", channel)
+            # Make sure it's actually an index
+            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all`", channel)
             slack_client.chat_postMessage(**send_message)
+            return
 
+        # Actually remove item
         data = database.remove_item(index)
+        # If data is None, there was an error. The index was too large
         if data != None:
+            # Save the new database
             database.save()
-
+            
+            # Tell them what we removed, so they know if it was the right one
             raw_message = ' *|* '.join(data) + '\n\n'
             raw_message = "Removed: \n" + raw_message
             send_message = bc.create_normal_message(raw_message, channel)
             slack_client.chat_postMessage(**send_message)
         else:
             send_message = bc.create_normal_message("Index to large!", channel)
+            slack_client.chat_postMessage(**send_message)
+    elif command == "checkout":
+        if len(args) == 1:
+            send_message = bc.create_normal_message("No index provided!", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        user_to_checkout = mention
+        # Get the index
+        try:
+            index = int(args[1])
+        except ValueError:
+            # Make sure it's actually an index
+            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all`", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        # Holder is always last property
+        if database.contents[index][-1] == 'N/A':
+            database.contents[index][-1] = user_to_checkout
+        else:
+            send_message = bc.create_normal_message(database.contents[index][-1] + " already checked that out!", channel)
             slack_client.chat_postMessage(**send_message)
 
 # Uh oh. An error occured. Log it, but don't stop 
