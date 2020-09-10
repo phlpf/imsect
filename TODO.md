@@ -22,7 +22,7 @@
         - supplier
         - date added (automatic)
         - type of part (description)
-        - quantity (optional, automatically 1)
+        - quantity
         - project (optional)
         - serial number (optional)
     - [x] Idea: use a JSON file to denote the format of the values, telling what values you have and what key should be used to call them
@@ -34,7 +34,7 @@
     - [ ] command to remove only some of high quantity items (e.g. screws)  
     - [ ] **\*FUTURE GOAL\*** make sure only permitted individuals are removing items  
 - [x] have command to 'checkout' items  
-    - [ ] add 'uncheckout'
+    - [x] add 'uncheckout'
         - what should the name be?
             - uncheckout?
     - should you be able to 'checkout' multiple items at a time?  
@@ -48,6 +48,7 @@
         - [ ] **\*FUTURE GOAL\*** other types of arguements:
             - all values (see `values`)
     - [ ] **\*FUTURE GOAL\*** sorting
+- [ ] have clean and documented code
 
 ## future goals
 

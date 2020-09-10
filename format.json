@@ -1,11 +1,11 @@
 {
-    "amount_of_keys": 9,
+    "amount_of_keys": 10,
     "identifier_index": 0,
     "automatic_date_index": 5,
     "name_index": 1,
     "optional_start": 7,
-    "holder_index": 6,
     "has_explanation_row":true,
+    "count_index":7,
     "key_names": {
         "0":"part_num",
         "1":"name",
@@ -14,7 +14,8 @@
         "4":"supplier",
         "5":"date",
         "6":"description",
-        "7":"project",
-        "8":"serial_num"
+        "7":"count",
+        "8":"project",
+        "9":"serial_num"
     }
 }

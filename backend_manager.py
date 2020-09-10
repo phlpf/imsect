@@ -43,6 +43,7 @@ class item_database:
             (1 if self.date_key<self.format_data["optional_start"] and self.date_key>=0 else 0)
         self.has_explanation_row = self.format_data["has_explanation_row"]
         self.identifier_index = self.format_data["identifier_index"]
+        self.count_index = self.format_data["count_index"]
     # get a specific item
     def get_item(self, item):
         for i in range(len(self.contents)):
@@ -55,7 +56,7 @@ class item_database:
         added_row = row[:]
         
         # Add part number
-        added_row = [str(len(self.contents))] + added_row
+        added_row = [str(int(self.contents[-1][0])+1)] + added_row
         
         # Add date if we need to
         if(self.date_key != -1):
@@ -71,23 +72,46 @@ class item_database:
             for _ in range(len(added_row), self.format_data["amount_of_keys"]):
                 added_row.append('N/A')
         
+        #Add this as holder by default
+        added_row.append('N/A')
         # Add the row
         self.contents.append(added_row)
-        added_row.append('N/A')
         # Return the row with all changes we made
         return added_row
     
-    # Remove an item
-    def remove_item(self, index):
+    # Remove an amount of an item
+    def remove_from_item(self, index, amount):
         size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        
         if index >= size_of_contents:
             print("Someone removed a bad index!")
             return None
+        
         removed_row, absolute_index = self.get_item(str(index))
+
+        if amount > int(self.contents[absolute_index][self.count_index]):
+            print("Someone removed a bad!")
+            return None
+        
+        self.contents[absolute_index][self.count_index] = str(int(self.contents[absolute_index][self.count_index])-amount) 
+        return removed_row
+
+    # Remove an item
+    def remove_item(self, index):
+        size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        
+        if index >= size_of_contents:
+            print("Someone removed a bad index!")
+            return None
+        
+        removed_row, absolute_index = self.get_item(str(index))
+        
         new_contents = self.contents[:]
         new_contents.pop(absolute_index)
+        
         for i in range(absolute_index, size_of_contents):
             new_contents[i][self.identifier_index] = str(int(new_contents[i][self.identifier_index])-1)
+        
         self.contents = new_contents[:]
         return removed_row
 

@@ -145,7 +145,6 @@ _Commands:_\n\
             send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all`", channel)
             slack_client.chat_postMessage(**send_message)
             return
-
         # Actually remove item
         data = database.remove_item(index)
         # If data is None, there was an error. The index was too large
@@ -161,6 +160,39 @@ _Commands:_\n\
         else:
             send_message = bc.create_normal_message("Index to large!", channel)
             slack_client.chat_postMessage(**send_message)
+    elif command == 'remove_from':
+        if len(args) <= 2:
+            send_message = bc.create_normal_message("No index provided!", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        # Get the index they want to get rid of
+        try:
+            index = int(args[1])
+        except ValueError:
+            # Make sure it's actually an index
+            send_message = bc.create_normal_message("Need the index of the item you want to remove. To find all indexes, message me `get_all`", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        # Get the amount we want to remove
+        try:
+            amount = int(args[2])
+        except ValueError:
+            # Make sure it's actually a number
+            send_message = bc.create_normal_message("Need the amount you want to remove. To find all amounts, message me `get_all`", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        
+        data = database.remove_from_item(index, amount)
+        if data == None:
+            send_message = bc.create_normal_message("Index to large or amount to much!", channel)
+            slack_client.chat_postMessage(**send_message)
+
+        # Tell them what we removed, so they know if it was the right one
+        raw_message = ' *|* '.join(data) + '\n\n'
+        raw_message = "Removed " + str(amount) + " from: \n" + raw_message
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+    
     elif command == "checkout":
         if len(args) == 1:
             send_message = bc.create_normal_message("No index provided!", channel)
@@ -181,6 +213,13 @@ _Commands:_\n\
             send_message = bc.create_normal_message("Someone else already checked that out (or it doesn't exist)!", channel)
             slack_client.chat_postMessage(**send_message)
             return
+            
+        # Tell them what we removed, so they know if it was the right one
+        raw_message = ' *|* '.join(data) + '\n\n'
+        raw_message = "Checkedout: \n" + raw_message
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+
         database.save()
     
     elif command == "uncheckout":
@@ -203,6 +242,13 @@ _Commands:_\n\
             send_message = bc.create_normal_message("You don't have that!", channel)
             slack_client.chat_postMessage(**send_message)
             return
+            
+        # Tell them what we removed, so they know if it was the right one
+        raw_message = ' *|* '.join(data) + '\n\n'
+        raw_message = "Uncheckedout: \n" + raw_message
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+
         database.save()
 # Uh oh. An error occured. Log it, but don't stop 
 @slack_events_adapter.on("error")
