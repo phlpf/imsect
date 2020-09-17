@@ -31,7 +31,7 @@
     - [x] automatic time added (possibly through the JSON file)
     - [x] add optional values
 - [x] have command to remove items  
-    - [ ] command to remove only some of high quantity items (e.g. screws)  
+    - [x] command to remove only some of high quantity items (e.g. screws)  
     - [ ] **\*FUTURE GOAL\*** make sure only permitted individuals are removing items  
 - [x] have command to 'checkout' items  
     - [x] add 'uncheckout'

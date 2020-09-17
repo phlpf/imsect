@@ -78,10 +78,14 @@ def handle_command(args, channel, mention):
 *Command Format (in channel): *`@imsect <command> <parameters>`\n\
 *Command Format (in dm with bot): *`<command> <parameters>`\n\
 _Commands:_\n\
-`help`: this function\n\
-`get_all`: list all items in database. it will be very large, so I recommend you do this in dms\n\
-`add`: add item. syntax for adding item: `add item name|location|in-house number|...`\n\
-    - Current valuse you need to supply: Name, Location, In-House Number, Supplier, Type, Project (Optional), Serial Number (Optional)", channel)
+* `help`: this function\n\
+* `get_all`: list all items in database. it will be very large and have pings, so I recommend you do this in dms\n\
+* `add`: add item. syntax for adding item: `add item name|location|in-house number|...`\n\
+    - Current valuse you need to supply: Name, Location, In-House Number, Supplier, Type, Project (Optional), Serial Number (Optional)\n\
+* `remove <item_index>`: remove an item from the database. use the index of the item to remove it.\n\
+* `remove_from <item_index> <amount_to_remove>`: remove an amount of items from a high quantity item (e.g. screws)\n\
+* `checkout <item_index>`: take out an item in your name\n\
+* `uncheckout <item_index>`: put an item back if you have it", channel)
 
         slack_client.chat_postMessage(**send_message)
 
@@ -156,6 +160,7 @@ _Commands:_\n\
             raw_message = ' *|* '.join(data) + '\n\n'
             raw_message = "Removed: \n" + raw_message
             send_message = bc.create_normal_message(raw_message, channel)
+
             slack_client.chat_postMessage(**send_message)
         else:
             send_message = bc.create_normal_message("Index to large!", channel)
@@ -237,7 +242,8 @@ _Commands:_\n\
             slack_client.chat_postMessage(**send_message)
             return
         data = database.checkout_item(index, 'N/A', needed_holder=user_to_uncheckout)
-
+        
+        # if it didn't work, they probably didn't have it
         if data==None:
             send_message = bc.create_normal_message("You don't have that!", channel)
             slack_client.chat_postMessage(**send_message)
