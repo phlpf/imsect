@@ -6,7 +6,7 @@ import datetime
 def get_current_date():
     return datetime.date.today()
 
-class item_database:
+class ItemDatabase:
     def __init__(self, filename, deliminator=',', format_file="format.json"):
         self.filename = filename
         self.deliminator = deliminator #TODO: figure out how to use this
@@ -38,6 +38,7 @@ class item_database:
         except FileNotFoundError:
             print("The Format File (" + format_file + ") doesn't exist. Exiting")
             exit()
+        # Get important indexes
         self.date_key = self.format_data["automatic_date_index"]
         self.optional_start = self.format_data["optional_start"] - \
             (1 if self.date_key<self.format_data["optional_start"] and self.date_key>=0 else 0)
@@ -81,47 +82,64 @@ class item_database:
     
     # Remove an amount of an item
     def remove_from_item(self, index, amount):
+        # Get our length, accounting for the explanation row
         size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
         
+        # If our index is bigger than it, it's a bad index
         if index >= size_of_contents:
             print("Someone removed a bad index!")
             return None
         
         removed_row, absolute_index = self.get_item(str(index))
 
+        # We can't remove that much!
         if amount > int(self.contents[absolute_index][self.count_index]):
             print("Someone removed a bad!")
             return None
         
+        # Replace the old amount with the new amount
         self.contents[absolute_index][self.count_index] = str(int(self.contents[absolute_index][self.count_index])-amount) 
         return removed_row
 
     # Remove an item
     def remove_item(self, index):
+        # Get our length, accounting for the explanation row
         size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
         
+        # If our index is bigger than it, it's a bad index
         if index >= size_of_contents:
             print("Someone removed a bad index!")
             return None
         
+        # Get the row to remove and it's index 
         removed_row, absolute_index = self.get_item(str(index))
         
+        # Copy contents into new contents to do work on data, remove row
         new_contents = self.contents[:]
         new_contents.pop(absolute_index)
         
+        # Change indexes for rows after it
         for i in range(absolute_index, size_of_contents):
             new_contents[i][self.identifier_index] = str(int(new_contents[i][self.identifier_index])-1)
         
+        # Update contents
         self.contents = new_contents[:]
         return removed_row
 
     def checkout_item(self, index, new_holder, needed_holder="N/A"):
+        # Get our length, accounting for the explanation row
         size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        
+        # If our index is bigger than it, it's a bad index
         if index >= size_of_contents:
             print("Someone checked out a bad index!")
             return None
+        
+        # Get row and index
         checkedout_row, absolute_index = self.get_item(str(index))
 
+        # Change holder value, assumed to be last
+        # needed_holder is so that we know who has it
         if checkedout_row[-1] == needed_holder:
             self.contents[absolute_index][-1] = new_holder
         else:
@@ -142,7 +160,7 @@ class item_database:
 
 # Test our functions
 if __name__ == '__main__':
-    test = item_database('test.csv')
+    test = ItemDatabase('test.csv')
     print(test.get_item('x'))
     print(test.get_item('row 2'))
     test.save()

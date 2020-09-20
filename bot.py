@@ -25,7 +25,7 @@ slack_events_adapter = seapi.SlackEventAdapter(signing_secret, "/slack/events")
 slack_client = WebClient(bot_token)
 
 # Database
-database = bm.item_database("database.csv")
+database = bm.ItemDatabase("database.csv")
 
 # A message was recieved that mentioned us in a channel
 @slack_events_adapter.on("app_mention")
