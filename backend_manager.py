@@ -45,6 +45,7 @@ class ItemDatabase:
         self.has_explanation_row = self.format_data["has_explanation_row"]
         self.identifier_index = self.format_data["identifier_index"]
         self.count_index = self.format_data["count_index"]
+        self.name_index = self.format_data["name_index"]
     # get a specific item
     def get_item(self, item):
         for i in range(len(self.contents)):
@@ -146,6 +147,19 @@ class ItemDatabase:
             return None
         
         return checkedout_row
+    # Search for specific attributes
+    def search_for(self, term, index=-1):
+        # deal with default
+        if index < 0:
+            index = self.name_index
+        
+        term = term.lower()
+        matches = []
+        for row in self.contents:
+            if term in row[index].lower():
+                matches.append(row[:])
+        
+        return matches
 
     # Save our file
     def save(self):

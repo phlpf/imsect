@@ -256,6 +256,22 @@ _Commands:_\n\
         slack_client.chat_postMessage(**send_message)
 
         database.save()
+    elif command == "search":
+        if len(args)==1:
+            send_message = bc.create_normal_message("No search term provided!", channel)
+            slack_client.chat_postMessage(**send_message)
+            return
+        term = args[1]
+
+        matches = database.search_for(term)
+        
+        # Tell them what we removed, so they know if it was the right one
+        raw_message = "Matches: \n\n"
+        for m in matches:
+            raw_message += ' *|* '.join(m) + '\n\n'
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+
 # Uh oh. An error occured. Log it, but don't stop 
 @slack_events_adapter.on("error")
 def error_handler(err):
