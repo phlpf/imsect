@@ -85,7 +85,8 @@ _Commands:_\n\
 * `remove <item_index>`: remove an item from the database. use the index of the item to remove it.\n\
 * `remove_from <item_index> <amount_to_remove>`: remove an amount of items from a high quantity item (e.g. screws)\n\
 * `checkout <item_index>`: take out an item in your name\n\
-* `uncheckout <item_index>`: put an item back if you have it", channel)
+* `uncheckout <item_index>`: put an item back if you have it\n\
+* `search <name_of_item>`: search for a specific items name", channel)
 
         slack_client.chat_postMessage(**send_message)
 

@@ -44,7 +44,7 @@
         - how about if multiple people take out high quantity items?
             - for now, assume they wont take out high quantity items, but just remove them  
 - [x] command to look at all items
-    - [ ] basic search (for `type of part`)
+    - [x] basic search (for `type of part`)
         - [ ] **\*FUTURE GOAL\*** other types of arguements:
             - all values (see `values`)
     - [ ] **\*FUTURE GOAL\*** sorting
