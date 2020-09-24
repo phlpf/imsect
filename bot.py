@@ -72,13 +72,14 @@ def handle_command(args, channel, mention):
     command = args[0]
     print("command: ", command, "\narguements: ", args)
 
-    if command == 'help' or 'help' in args:
+    if (command == 'help' or 'help' in args) or (command == 'h' or 'h' in args):
         # Send a message showing how to use the bot
         send_message = bc.create_normal_message("IMSect. Inventory Management System.\n\
 *Command Format (in channel): *`@imsect <command> <parameters>`\n\
 *Command Format (in dm with bot): *`<command> <parameters>`\n\
 _Commands:_\n\
 * `help`: this function\n\
+* `version`: get the current version of imsect\n\
 * `get_all`: list all items in database. it will be very large and have pings, so I recommend you do this in dms\n\
 * `add`: add item. syntax for adding item: `add item name|location|in-house number|...`\n\
     - Current valuse you need to supply: Name, Location, In-House Number, Supplier, Type, Project (Optional), Serial Number (Optional)\n\
@@ -90,8 +91,8 @@ _Commands:_\n\
 
         slack_client.chat_postMessage(**send_message)
 
-    elif command == 'test':
-        send_message = bc.create_normal_message("this is a test command for WIP features", channel)
+    elif command == 'version' or command == 'v':
+        send_message = bc.create_normal_message("IMSect. Inventory Management System.\nVersion 1.0.0. Created by `@Philip F.`. Ping him for help.", channel)
         slack_client.chat_postMessage(**send_message)
 
     elif command == 'get_all':
