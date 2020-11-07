@@ -5,6 +5,7 @@
 !bot.py
 !block_creator.py
 !backend_manager.py
+!sheets_api_handler.py
 
 # add this file
 !.gitignore

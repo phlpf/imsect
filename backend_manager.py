@@ -81,7 +81,7 @@ class ItemDatabase:
 
         # Add optional data if it's not there
         if len(added_row) < self.format_data["amount_of_keys"] and len(added_row) >= self.optional_start:
-            for _ in range(len(added_row), self.format_data["amount_of_keys"]):
+            for _ in range(len(added_row), self.format_data["amount_of_keys"]-1):
                 added_row.append('N/A')
         
         #Add this as holder by default
@@ -181,6 +181,7 @@ class ItemDatabase:
                     csvfile.write((self.deliminator if not i == 0 else '') + str(row[i]))
 
                 csvfile.write('\n')
+        self.sh.write(self.contents, sheets_api_handler.data_to_range(self.contents))
 # Test our functions
 if __name__ == '__main__':
     test = ItemDatabase('database.csv')
