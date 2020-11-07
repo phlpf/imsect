@@ -48,10 +48,12 @@
         - [ ] **\*FUTURE GOAL\*** other types of arguements:
             - all values (see `values`)
     - [ ] **\*FUTURE GOAL\*** sorting
-- [ ] have clean and documented code
+- [x] have clean and documented code
 
 ## future goals
 
+- [ ] get rid of ugly "explanation row", replace it with format.json
+    - [ ] get rid of hard-coded indices
 - [ ] be able to only show important values
     - multiple list options?
         - `holders` option
