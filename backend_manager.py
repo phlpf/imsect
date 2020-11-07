@@ -1,6 +1,7 @@
 import csv
 import json
 import datetime
+import sheets_api_handler
 #import csv_formatter as csvf
 
 def get_current_date():
@@ -42,10 +43,19 @@ class ItemDatabase:
         self.date_key = self.format_data["automatic_date_index"]
         self.optional_start = self.format_data["optional_start"] - \
             (1 if self.date_key<self.format_data["optional_start"] and self.date_key>=0 else 0)
-        self.has_explanation_row = self.format_data["has_explanation_row"]
         self.identifier_index = self.format_data["identifier_index"]
         self.count_index = self.format_data["count_index"]
         self.name_index = self.format_data["name_index"]
+
+        self.amount_of_keys = self.format_data["amount_of_keys"]
+
+        # Get explanation row
+        full_names = []
+        for i in range (0,self.amount_of_keys):
+            full_names.append(self.format_data["explanation_row"][str(i)])
+        self.explanation_row =  '*' + (' | '.join(full_names)) + '*'
+
+        self.sh = sheets_api_handler.SheetHandler()
     # get a specific item
     def get_item(self, item):
         for i in range(len(self.contents)):
@@ -84,7 +94,7 @@ class ItemDatabase:
     # Remove an amount of an item
     def remove_from_item(self, index, amount):
         # Get our length, accounting for the explanation row
-        size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        size_of_contents = len(self.contents) 
         
         # If our index is bigger than it, it's a bad index
         if index >= size_of_contents:
@@ -105,7 +115,7 @@ class ItemDatabase:
     # Remove an item
     def remove_item(self, index):
         # Get our length, accounting for the explanation row
-        size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        size_of_contents = len(self.contents)  
         
         # If our index is bigger than it, it's a bad index
         if index >= size_of_contents:
@@ -129,7 +139,7 @@ class ItemDatabase:
 
     def checkout_item(self, index, new_holder, needed_holder="N/A"):
         # Get our length, accounting for the explanation row
-        size_of_contents = len(self.contents) - (1 if self.has_explanation_row else 0) 
+        size_of_contents = len(self.contents) 
         
         # If our index is bigger than it, it's a bad index
         if index >= size_of_contents:
@@ -171,11 +181,10 @@ class ItemDatabase:
                     csvfile.write((self.deliminator if not i == 0 else '') + str(row[i]))
 
                 csvfile.write('\n')
-
 # Test our functions
 if __name__ == '__main__':
-    test = ItemDatabase('test.csv')
+    test = ItemDatabase('database.csv')
     print(test.get_item('x'))
-    print(test.get_item('row 2'))
-    test.save()
-    print(str(get_current_date()), type(str(get_current_date())))
+    print(test.contents)
+    print(test.explanation_row)
+ 

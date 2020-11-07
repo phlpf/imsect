@@ -1,5 +1,5 @@
 {
-    "amount_of_keys": 10,
+    "amount_of_keys": 11,
     "identifier_index": 0,
     "automatic_date_index": 5,
     "name_index": 1,
@@ -17,5 +17,18 @@
         "7":"count",
         "8":"project",
         "9":"serial_num"
+    },
+    "explanation_row": {
+        "0":"#",
+        "1":"Name",
+        "2":"Location",
+        "3":"Number",
+        "4":"Supplier",
+        "5":"Date",
+        "6":"Description",
+        "7":"Count",
+        "8":"Project",
+        "9":"Serial",
+        "10":"Current Holder"
     }
 }

@@ -52,7 +52,7 @@
 
 ## future goals
 
-- [ ] get rid of ugly "explanation row", replace it with format.json
+- [x] get rid of ugly "explanation row", replace it with format.json
     - [ ] get rid of hard-coded indices
 - [ ] be able to only show important values
     - multiple list options?

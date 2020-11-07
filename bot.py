@@ -97,13 +97,10 @@ _Commands:_\n\
 
     elif command == 'get_all':
         # Return a formatted version of the database
-        raw_message = ""
+        raw_message = database.explanation_row + '\n'
         for i in range(len(database.contents)):
             # If we have one, add a row explaning what the data is
-            if i == 0 and database.has_explanation_row:
-                raw_message += '*' + (' | '.join(database.contents[i])) + '*'+'\n\n'
-            else:
-                raw_message += ' *|* '.join(database.contents[i]) + '\n\n'
+            raw_message += ' *|* '.join(database.contents[i]) + '\n\n'
         
         # Send a message containing all the data
         send_message = bc.create_normal_message(raw_message, channel)
