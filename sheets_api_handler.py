@@ -69,11 +69,10 @@ class SheetHandler:
                 spreadsheetId=sheet_id, range="A1",
                 valueInputOption="RAW", body=body).execute()
             range_name = result["tableRange"]
-            print(result)
             result = self.service.spreadsheets().values().get(
                 spreadsheetId=sheet_id, range=range_name).execute()
             rows = result.get('values', [])
-            print(rows)
+            return rows
         else:
             print("sheets_api_handler.py: No active sheet. Skipping")
 columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

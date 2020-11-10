@@ -270,6 +270,14 @@ _Commands:_\n\
             raw_message += ' *|* '.join(m) + '\n\n'
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
+    elif command == "update":
+        result = database.read_from_sheet()
+        database.save()
+        raw_message = "New Database: \n\n"
+        for row in database.contents:
+            raw_message += ' *|* '.join(row) + '\n\n'
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
 
 # Uh oh. An error occured. Log it, but don't stop 
 @slack_events_adapter.on("error")

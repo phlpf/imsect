@@ -170,7 +170,10 @@ class ItemDatabase:
                 matches.append(row[:])
         
         return matches
-
+    # Read from a google sheet
+    def read_from_sheet(self):
+        self.contents = self.sh.read()
+        return self.contents
     # Save our file
     def save(self):
         with open(self.filename, 'w') as csvfile:
