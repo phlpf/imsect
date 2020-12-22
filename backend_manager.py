@@ -174,6 +174,14 @@ class ItemDatabase:
     def read_from_sheet(self):
         self.contents = self.sh.read()
         return self.contents
+    def revert(self):
+        with open(self.filename+'.old', newline='') as backup:
+            contents = csv.reader(backup, quotechar='"')
+            self.contents = []
+        
+            for row in contents:
+                self.contents.append(row)
+        return self.contents
     # Save our file
     def save(self):
         with open(self.filename, 'w') as csvfile:

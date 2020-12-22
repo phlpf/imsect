@@ -271,11 +271,24 @@ _Commands:_\n\
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
     elif command == "update":
-        result = database.read_from_sheet()
+        database.read_from_sheet()
         database.save()
         raw_message = "New Database: \n\n"
         for row in database.contents:
             raw_message += ' *|* '.join(row) + '\n\n'
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+    elif command == "revert":
+        database.revert()
+        database.save()
+        raw_message = "Reverted Database: \n\n"
+        for row in database.contents:
+            raw_message += ' *|* '.join(row) + '\n\n'
+        send_message = bc.create_normal_message(raw_message, channel)
+        slack_client.chat_postMessage(**send_message)
+    elif command == "save":
+        database.save()
+        raw_message = "Saved to Google Sheet!\n\n"
         send_message = bc.create_normal_message(raw_message, channel)
         slack_client.chat_postMessage(**send_message)
 
